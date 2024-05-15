@@ -33,4 +33,7 @@ config.yml
 # Config
 config.yaml
 
+# Docker persisted db
+/project/db-data
+
 # End of https://www.toptal.com/developers/gitignore/api/go
