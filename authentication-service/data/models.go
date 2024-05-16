@@ -83,7 +83,7 @@ func (u *User) GetByEmail(email string) (*User, error) {
 	defer cancel()
 
 	query := `
-		SELECT d, email, first_name, last_name, password, user_active, created_at, updated_at
+		SELECT id, email, first_name, last_name, password, user_active, created_at, updated_at
 		FROM users WHERE email = $1`
 
 	user := new(User)
@@ -234,7 +234,7 @@ func (u *User) PasswordMatches(plainText string) (bool, error) {
 	if err != nil {
 		switch {
 		case errors.Is(err, bcrypt.ErrMismatchedHashAndPassword):
-			return false, nil
+			return false, err
 		default:
 			return false, err
 		}
