@@ -35,5 +35,6 @@ config.yaml
 
 # Docker persisted db
 /project/db-data
+/project/sql-scripts
 
 # End of https://www.toptal.com/developers/gitignore/api/go
