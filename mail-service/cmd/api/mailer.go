@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"html/template"
+	"log"
 	"time"
 
 	"github.com/vanng822/go-premailer/premailer"
@@ -50,12 +51,12 @@ func (m *Mail) SendSMTPMessage(msg Message) error {
 
 	formattedMessage, err := m.buildHTMLMessage(msg)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	plainMessage, err := m.buildPlainTextMessage(msg)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	mailSrv := mail.NewSMTPClient()
@@ -70,6 +71,7 @@ func (m *Mail) SendSMTPMessage(msg Message) error {
 
 	smtpClient, err := mailSrv.Connect()
 	if err != nil {
+		log.Println("connect mail server:", err)
 		return err
 	}
 
@@ -88,6 +90,7 @@ func (m *Mail) SendSMTPMessage(msg Message) error {
 	}
 
 	if err := email.Send(smtpClient); err != nil {
+		log.Println("send mail:", err)
 		return err
 	}
 
@@ -95,7 +98,7 @@ func (m *Mail) SendSMTPMessage(msg Message) error {
 }
 
 func (m *Mail) buildHTMLMessage(msg Message) (string, error) {
-	templateToRender := "./templates/mail.html.gohmtl"
+	templateToRender := "./templates/mail.html.gohtml"
 
 	t, err := template.New("email-html").ParseFiles(templateToRender)
 	if err != nil {
@@ -117,7 +120,7 @@ func (m *Mail) buildHTMLMessage(msg Message) (string, error) {
 }
 
 func (m *Mail) buildPlainTextMessage(msg Message) (string, error) {
-	templateToRender := "./templates/mail.plain.gohmtl"
+	templateToRender := "./templates/mail.plain.gohtml"
 
 	t, err := template.New("email-plain").ParseFiles(templateToRender)
 	if err != nil {
